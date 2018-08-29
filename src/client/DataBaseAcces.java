@@ -1,6 +1,7 @@
 package client;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 
 public class DataBaseAcces implements Serializable {
 
@@ -10,6 +11,7 @@ public class DataBaseAcces implements Serializable {
 	private String user;
 	private String password;
 	private String query;
+	private ResultSet result;
 
 	public DataBaseAcces(String bD_URL, String user, String password, String query) {
 		super();
@@ -49,6 +51,14 @@ public class DataBaseAcces implements Serializable {
 
 	public void setQuery(String query) {
 		this.query = query;
+	}
+
+	public ResultSet getResult() {
+		return result;
+	}
+
+	public void setResult(ResultSet result) {
+		this.result = result;
 	}
 
 }

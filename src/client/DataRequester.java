@@ -19,28 +19,34 @@ public class DataRequester {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Insira a url do banco de dados: ");
 			url = sc.nextLine();
-			System.out.println("\nInsira o nome do usu·rio: ");
+			System.out.println("\nInsira o nome do usuario: ");
 			user = sc.nextLine();
-			System.out.println("\n Insira senha do usu·rio: ");
+			System.out.println("\nInsira senha do usuario: ");
 			password = sc.nextLine();
-			System.out.println("\n Insira a query a ser executada: ");
+			System.out.println("\nInsira a query a ser executada: ");
 			query = sc.nextLine();
 			sc.close();
-			ResultSet result = stub.executeQuery(new DataBaseAcces(url, user, password, query));
+			DataBaseAcces db = new DataBaseAcces(url, user, password, query);
+			stub.executeQuery(db);
 			
+			ResultSet result = db.getResult();
 			
-			ResultSetMetaData rsmd = result.getMetaData();
-			int columnsNumber = rsmd.getColumnCount();
-			
-			while (result.next()) {
-			    for (int i = 1; i <= columnsNumber; i++) {
-			        if (i > 1) System.out.print(",  ");
-			        String columnValue = result.getString(i);
-			        System.out.print(columnValue + " " + rsmd.getColumnName(i));
-			    }
-			    System.out.println("");
+			if (result != null) {
+				ResultSetMetaData rsmd = result.getMetaData();
+				int columnsNumber = rsmd.getColumnCount();
+
+				while (result.next()) {
+					for (int i = 1; i <= columnsNumber; i++) {
+						if (i > 1)
+							System.out.print(",  ");
+						String columnValue = result.getString(i);
+						System.out.print(columnValue + " " + rsmd.getColumnName(i));
+					}
+					System.out.println("");
+				}
 			}
-			
+			else System.out.println("Resultado n√£o encontrado");
+
 		} catch (Exception e) {
 			System.out.println("Client Exception: " + e.toString());
 			e.printStackTrace();

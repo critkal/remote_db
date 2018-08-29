@@ -5,6 +5,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.Scanner;
 
 import server.Access;
@@ -26,7 +27,20 @@ public class DataRequester {
 			query = sc.nextLine();
 			sc.close();
 			ResultSet result = stub.executeQuery(new DataBaseAcces(url, user, password, query));
-			System.out.println("resultado: " + result);
+			
+			
+			ResultSetMetaData rsmd = result.getMetaData();
+			int columnsNumber = rsmd.getColumnCount();
+			
+			while (result.next()) {
+			    for (int i = 1; i <= columnsNumber; i++) {
+			        if (i > 1) System.out.print(",  ");
+			        String columnValue = result.getString(i);
+			        System.out.print(columnValue + " " + rsmd.getColumnName(i));
+			    }
+			    System.out.println("");
+			}
+			
 		} catch (Exception e) {
 			System.out.println("Client Exception: " + e.toString());
 			e.printStackTrace();

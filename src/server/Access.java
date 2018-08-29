@@ -5,5 +5,5 @@ import java.rmi.RemoteException;
 import client.DataBaseAcces;
 
 public interface Access extends Remote {
-	public void executeQuery(DataBaseAcces data) throws RemoteException;
+	public ResultQuery executeQuery(DataBaseAcces data) throws RemoteException;
 }

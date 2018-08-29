@@ -18,53 +18,40 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 	}
 
 	@Override
-	public void executeQuery(DataBaseAcces data) throws RemoteException {
-		Statement stmt = null;
-		ResultSet result = null;
-		Connection connection = null;
-		try {
+	public ResultQuery executeQuery(DataBaseAcces data) throws RemoteException {
+		
+		ResultQuery queryResult = null;
+		try (
+				Connection connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
+				Statement stmt = connection.createStatement();
+				){
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
-			stmt = connection.createStatement();
-			String query = data.getQuery();
-			if(query.toLowerCase().contains("insert") || query.toLowerCase().contains("update")||query.toLowerCase().contains("delete")) {
-				stmt.executeUpdate(query);
-				System.out.println("Sucesso");
-			}
-			else {
-				result = stmt.executeQuery(data.getQuery());
-				
-				ResultSetMetaData rsmd = result.getMetaData();
-				int columnsNumber = rsmd.getColumnCount();
-
-				while (result.next()) {
-					for (int i = 1; i <= columnsNumber; i++) {
-						if (i > 1)
-							System.out.print(",  ");
-						String columnValue = result.getString(i);
-						System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
-					}
-					System.out.println("");
-				}
-				
-				data.setResult(result);
-				System.out.println("S");
-			}
 			
+			String query = data.getQuery();
+
+			if (query.toLowerCase().contains("insert") || query.toLowerCase().contains("update")
+					|| query.toLowerCase().contains("delete")) {
+				try {
+					stmt.executeUpdate(query);
+					queryResult = new ResultQuery("Operação bem sucedida.");
+				} catch (SQLException e) {
+					queryResult = new ResultQuery("Houve erro na operação.");
+				}
+
+			} else {
+				try(ResultSet result = stmt.executeQuery(data.getQuery())) {
+					queryResult = new ResultQuery(result);
+				} catch (SQLException e) {
+					queryResult = new ResultQuery("Houve erro na operação.");
+				}
+
+			}
+
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-				connection.close();
-				if (result != null) {
-					result.close();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 
 		}
+		return queryResult;
 	}
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException {

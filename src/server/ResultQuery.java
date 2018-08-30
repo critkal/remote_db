@@ -7,6 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * 
+ * @author Pedro Arthur and Gabriel Victor
+ * 
+ *         Serializable class that stores the result of the operation done in
+ *         the database.
+ *
+ */
 public class ResultQuery implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -14,11 +22,24 @@ public class ResultQuery implements Serializable {
 	private String message;
 	private ArrayList<HashMap<String, String>> result;
 
+	/**
+	 * Constructor used when the operation only returns a message.
+	 * 
+	 * @param message
+	 */
 	public ResultQuery(String message) {
 		this.message = message;
 		this.result = null;
 	}
 
+	/**
+	 * 
+	 * Constructor that converts the result set from the query in the database to a
+	 * list of hashmap with the data as String.
+	 * 
+	 * @param resultSet
+	 * @throws SQLException
+	 */
 	public ResultQuery(ResultSet resultSet) throws SQLException {
 		this.result = new ArrayList<>();
 

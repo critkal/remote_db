@@ -1,8 +1,14 @@
 package client;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
 
+/**
+ * 
+ * @author Pedro Arthur and Gabriel Victor
+ *
+ *         Class representing the object sent from the client to the server
+ *         containing the data needed to access the database.
+ */
 public class DataBaseAcces implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -11,7 +17,6 @@ public class DataBaseAcces implements Serializable {
 	private String user;
 	private String password;
 	private String query;
-	private ResultSet result;
 
 	public DataBaseAcces(String bD_URL, String user, String password, String query) {
 		super();
@@ -51,14 +56,6 @@ public class DataBaseAcces implements Serializable {
 
 	public void setQuery(String query) {
 		this.query = query;
-	}
-
-	public ResultSet getResult() {
-		return result;
-	}
-
-	public void setResult(ResultSet result) {
-		this.result = result;
 	}
 
 }

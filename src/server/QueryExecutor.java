@@ -9,6 +9,14 @@ import java.sql.*;
 
 import client.DataBaseAcces;
 
+/**
+ * 
+ * @author Pedro Arthur and Gabriel Victor
+ * 
+ *         This class uses the interface to implement the service that performs
+ *         operations on the database indicated by the client.
+ *
+ */
 public class QueryExecutor extends UnicastRemoteObject implements Access {
 
 	private static final long serialVersionUID = 1L;
@@ -19,14 +27,12 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 
 	@Override
 	public ResultQuery executeQuery(DataBaseAcces data) throws RemoteException {
-		
+
 		ResultQuery queryResult = null;
-		try (
-				Connection connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
-				Statement stmt = connection.createStatement();
-				){
+		try (Connection connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
+				Statement stmt = connection.createStatement();) {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			
+
 			String query = data.getQuery();
 
 			if (query.toLowerCase().contains("insert") || query.toLowerCase().contains("update")
@@ -39,10 +45,10 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 				}
 
 			} else {
-				try(ResultSet result = stmt.executeQuery(data.getQuery())) {
+				try (ResultSet result = stmt.executeQuery(data.getQuery())) {
 					queryResult = new ResultQuery(result);
 				} catch (SQLException e) {
-					queryResult = new ResultQuery("Houve erro na operação.");
+					queryResult = new ResultQuery("Houve erro na consulta.");
 				}
 
 			}

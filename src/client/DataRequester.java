@@ -30,14 +30,16 @@ public class DataRequester {
 			user = sc.nextLine();
 			System.out.println("\nInsira senha do usuario: ");
 			password = sc.nextLine();
+
+			DataBaseInfo db = new DataBaseInfo(url, user, password);
+			stub.connectDB(db);
+			
 			System.out.println("\nInsira a query a ser executada: ");
 			query = sc.nextLine();
+			
+			ResultQuery result = stub.executeQuery(query);
 
-			ResultQuery resultQuery;
-			DataBaseAcces db = new DataBaseAcces(url, user, password, query);
-			resultQuery = stub.executeQuery(db);
-
-			System.out.println(resultQuery);
+			System.out.println(result);
 
 		} catch (Exception e) {
 			System.out.println("Client Exception: " + e.toString());

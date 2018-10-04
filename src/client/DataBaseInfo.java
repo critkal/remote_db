@@ -9,29 +9,27 @@ import java.io.Serializable;
  *         Class representing the object sent from the client to the server
  *         containing the data needed to access the database.
  */
-public class DataBaseAcces implements Serializable {
+public class DataBaseInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String BD_URL;
 	private String user;
 	private String password;
-	private String query;
 
-	public DataBaseAcces(String bD_URL, String user, String password, String query) {
+	public DataBaseInfo(String bd_URL, String user, String password) {
 		super();
-		BD_URL = bD_URL;
+		this.BD_URL = bd_URL;
 		this.user = user;
 		this.password = password;
-		this.query = query;
 	}
 
 	public String getBD_URL() {
 		return BD_URL;
 	}
 
-	public void setBD_URL(String bD_URL) {
-		BD_URL = bD_URL;
+	public void setBD_URL(String bd_URL) {
+		BD_URL = bd_URL;
 	}
 
 	public String getUser() {
@@ -48,14 +46,6 @@ public class DataBaseAcces implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
 	}
 
 }

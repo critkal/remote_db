@@ -7,7 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 
-import client.DataBaseAcces;
+import client.DataBaseInfo;
 
 /**
  * 
@@ -25,39 +25,44 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 		super();
 	}
 
+	private Connection connection;
+
 	@Override
-	public ResultQuery executeQuery(DataBaseAcces data) throws RemoteException {
+	public ResultQuery executeQuery(String query) throws RemoteException {
 
 		ResultQuery queryResult = null;
-		try (Connection connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
-				Statement stmt = connection.createStatement();) {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+		try (Statement stmt = this.connection.createStatement()) {
 
-			String query = data.getQuery();
+			if (!query.toLowerCase().contains("select") /*
+														 * || query.toLowerCase().contains("update") ||
+														 * query.toLowerCase().contains("delete")
+														 */) {
 
-			if (query.toLowerCase().contains("insert") || query.toLowerCase().contains("update")
-					|| query.toLowerCase().contains("delete")) {
-				try {
-					stmt.executeUpdate(query);
-					queryResult = new ResultQuery("Operação bem sucedida.");
-				} catch (SQLException e) {
-					queryResult = new ResultQuery("Houve erro na operação.");
-				}
+				stmt.executeUpdate(query);
+				queryResult = new ResultQuery("Operação bem sucedida.");
 
 			} else {
-				try (ResultSet result = stmt.executeQuery(data.getQuery())) {
-					queryResult = new ResultQuery(result);
-				} catch (SQLException e) {
-					queryResult = new ResultQuery("Houve erro na consulta.");
-				}
-
+				ResultSet result = stmt.executeQuery(query);
+				queryResult = new ResultQuery(result);
 			}
 
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 
 		}
 		return queryResult;
+	}
+
+	@Override
+	public void connectDB(DataBaseInfo data) throws RemoteException, SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			this.connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException {

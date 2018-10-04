@@ -2,7 +2,9 @@ package server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import client.DataBaseAcces;
+import java.sql.SQLException;
+
+import client.DataBaseInfo;
 
 /**
  * 
@@ -13,5 +15,7 @@ import client.DataBaseAcces;
  * 
  */
 public interface Access extends Remote {
-	public ResultQuery executeQuery(DataBaseAcces data) throws RemoteException;
+	public ResultQuery executeQuery(String query) throws RemoteException;
+
+	public void connectDB(DataBaseInfo data) throws RemoteException, SQLException;
 }

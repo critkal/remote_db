@@ -42,8 +42,7 @@ public class DataRequester {
 			System.out.println(result);
 
 		} catch (Exception e) {
-			System.out.println("Client Exception: " + e.toString());
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

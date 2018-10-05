@@ -28,7 +28,7 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 	private Connection connection;
 
 	@Override
-	public ResultQuery executeQuery(String query) throws RemoteException {
+	public ResultQuery executeQuery(String query) throws RemoteException, SQLException {
 
 		ResultQuery queryResult = null;
 		try (Statement stmt = this.connection.createStatement()) {
@@ -47,21 +47,21 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new SQLException("Erro ao executar query.");
 
 		}
 		return queryResult;
 	}
 
 	@Override
-	public void connectDB(DataBaseInfo data) throws RemoteException, SQLException {
+	public void connectDB(DataBaseInfo data) throws RemoteException, SQLException, ClassNotFoundException {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			this.connection = DriverManager.getConnection(data.getBD_URL(), data.getUser(), data.getPassword());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new SQLException("Erro ao tentar conectar com o Banco de dados.");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new ClassNotFoundException("Erro ao Conectar com drive JDBC.");
 		}
 	}
 

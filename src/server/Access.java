@@ -15,7 +15,7 @@ import client.DataBaseInfo;
  * 
  */
 public interface Access extends Remote {
-	public ResultQuery executeQuery(String query) throws RemoteException;
+	public ResultQuery executeQuery(String query) throws RemoteException, SQLException;
 
-	public void connectDB(DataBaseInfo data) throws RemoteException, SQLException;
+	public void connectDB(DataBaseInfo data) throws RemoteException, SQLException, ClassNotFoundException ;
 }

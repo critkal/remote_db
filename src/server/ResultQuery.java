@@ -19,18 +19,7 @@ public class ResultQuery implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String message;
 	private ArrayList<HashMap<String, String>> result;
-
-	/**
-	 * Constructor used when the operation only returns a message.
-	 * 
-	 * @param message
-	 */
-	public ResultQuery(String message) {
-		this.message = message;
-		this.result = null;
-	}
 
 	/**
 	 * 
@@ -56,14 +45,6 @@ public class ResultQuery implements Serializable {
 		}
 	}
 
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
 	public ArrayList<HashMap<String, String>> getResult() {
 		return result;
 	}
@@ -74,11 +55,6 @@ public class ResultQuery implements Serializable {
 
 	@Override
 	public String toString() {
-		if (this.message != null) {
-			return this.message;
-		} else {
-			return this.result.toString();
-		}
+		return this.result.toString();
 	}
-
 }

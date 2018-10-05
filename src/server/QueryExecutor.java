@@ -33,13 +33,9 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 		ResultQuery queryResult = null;
 		try (Statement stmt = this.connection.createStatement()) {
 
-			if (!query.toLowerCase().contains("select") /*
-														 * || query.toLowerCase().contains("update") ||
-														 * query.toLowerCase().contains("delete")
-														 */) {
+			if (!query.toLowerCase().contains("select")) {
 
 				stmt.executeUpdate(query);
-				queryResult = new ResultQuery("Operação bem sucedida.");
 
 			} else {
 				ResultSet result = stmt.executeQuery(query);
@@ -69,7 +65,7 @@ public class QueryExecutor extends UnicastRemoteObject implements Access {
 		LocateRegistry.createRegistry(1099);
 		QueryExecutor qe = new QueryExecutor();
 		Naming.rebind("rmi://localhost/queryexecutor", qe);
-		System.out.println("Server ready.");
+		System.out.println("Servidor pronto.");
 	}
 
 }
